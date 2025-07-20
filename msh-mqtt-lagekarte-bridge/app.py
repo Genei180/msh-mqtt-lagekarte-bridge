@@ -36,7 +36,15 @@ def send_GPS_Information_to_mobile_lagekarte(mlo_tid, lat, lon, username):
         logger.error(f"Error sending to Lagekarte: {e}")
 
 
+node_name_map_path = "data/tracker_name_map.json"
 node_name_map = {}
+
+if os.path.exists(node_name_map_path):
+    with open(node_name_map_path, "r") as f:
+        node_name_map = json.load(f)
+        logger.debug("Loading Existing Node Mapping")
+        logger.debug(node_name_map)
+
 
 def convert_to_fixpoint(value):
     return value / 1e7
@@ -48,7 +56,7 @@ def on_message(client, userdata, msg):
     try:
         json_message = json.loads(msg.payload.decode())
         msg_type = json_message["type"]
-        nodeID = json_message["from"]
+        nodeID = str(json_message["from"])
 
         if msg_type == "nodeinfo":
             payload = json_message["payload"]
@@ -58,6 +66,9 @@ def on_message(client, userdata, msg):
             if nodeID and longname:
                 node_name_map[nodeID] = longname
                 logger.info(f"Creating Mapping {nodeID}: {longname}")
+                with open(node_name_map_path, "w") as f:
+                    json.dump(node_name_map, f, indent=2)
+                    logger.debug("Serialized Mapping")
 
         elif msg_type == "position":
             if nodeID in node_name_map:

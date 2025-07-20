@@ -25,6 +25,8 @@ services:
       MQTT_PASSWORD: "0815DLRG"
       MQTT_TOPIC: "msh/tracker/2/json/DLRGulm/#"
       MLO_USERNAME: "DLRGulm"
+    volumes:
+      - ./msh-mqtt-lagekarte-bridge/data:/app/data
     depends_on:
       - mosquitto
     networks:
