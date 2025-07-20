@@ -23,7 +23,7 @@ services:
       MQTT_PORT: 1883
       MQTT_USER: "default_user"
       MQTT_PASSWORD: "0815DLRG"
-      MQTT_TOPIC: "msh/gps"
+      MQTT_TOPIC: "msh/tracker/2/json/DLRGulm/#"
       MLO_USERNAME: "DLRGulm"
     depends_on:
       - mosquitto
