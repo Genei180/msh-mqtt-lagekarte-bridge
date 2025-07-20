@@ -1,0 +1,34 @@
+version: "3"
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:rw
+      - ./mosquitto/data:/mosquitto/data:rw
+      - ./mosquitto/log:/mosquitto/log:rw
+    restart:
+      unless-stopped
+    networks: 
+      - mqtt-net
+
+  meshtastic_bridge:
+    build: ./msh-mqtt-lagekarte-bridge/
+    restart: unless-stopped
+    environment: 
+      MQTT_BROKER: "mosquitto"
+      MQTT_PORT: 1883
+      MQTT_USER: "default_user"
+      MQTT_PASSWORD: "0815DLRG"
+      MQTT_TOPIC: "msh/gps"
+      MLO_USERNAME: "DLRGulm"
+    depends_on:
+      - mosquitto
+    networks:
+      - mqtt-net
+
+networks:
+  mqtt-net:

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  meshtastic_bridge:
+    build: .
+    restart: unless-stopped
+    environment:
+      MQTT_BROKER: "mosquitto"
+      MQTT_PORT: 1883
+      MQTT_USER: "default_user"
+      MQTT_PASSWORD: "0815DLRG"
+      MQTT_TOPIC: "msh/gps"
+      MLO_USERNAME: "DLRGulm"
+
